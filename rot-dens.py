@@ -69,6 +69,7 @@ if __name__ == '__main__':
 	erotsq = bconst*bconst*erotsq/(4.0*math.pi*nslice*nslice*dens)
 	dens_comb = np.array([cost, dens, erot, erotsq])
 	np.savetxt('linden1.dat',dens_comb.T,delimiter=' ',header='First col. --> ei.ej; 2nd and 3rd and 4th cols are the density and energy estimator and heat capacity estimator, respectively. ')
+	exit()
 
 	cstep1=2.0/float(size_theta1-1)
 	pstep1=2.0*math.pi/float(size_phi1-1)
@@ -107,8 +108,10 @@ if __name__ == '__main__':
 					indices[ii] = ii
 					ii=ii+1
 	dens1 = dens1/(4.0*math.pi)
-	erot1 = -bconst*erot1/(4.0*math.pi*dens1*nslice)
-	erotsq1 = bconst*bconst*erotsq1/(4.0*math.pi*nslice*nslice*dens1)
+	#erot1 = bconst*erot1/(4.0*math.pi*dens1*nslice)
+	erot1 = bconst*erot1/(4.0*math.pi*nslice)
+	#erotsq1 = bconst*bconst*erotsq1/(4.0*math.pi*nslice*nslice*dens1)
+	erotsq1 = bconst*bconst*erotsq1/(4.0*math.pi*nslice*nslice)
 	dens_comb1 = np.array([cosg, dens1, erot1, erotsq1])
 	#np.savetxt('linden.dat',dens_comb1.T, fmt='%10.8e', delimiter=' ',header='First col. --> ei.ej; 2nd and 3rd and 4th cols are the density and energy estimator and heat capacity estimator, respectively. ')
 	np.savetxt('linden.dat',dens_comb1.T, fmt='%10.8e', delimiter=' ')
