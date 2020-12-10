@@ -65,7 +65,7 @@ if __name__ == '__main__':
 		erotsq[ic] = sum_engsq
 			
 	dens = dens/(4.0*math.pi)
-	erot = -bconst*erot/(4.0*math.pi*dens*nslice)
+	erot = bconst*erot/(4.0*math.pi*dens*nslice)
 	erotsq = bconst*bconst*erotsq/(4.0*math.pi*nslice*nslice*dens)
 	dens_comb = np.array([cost, dens, erot, erotsq])
 	np.savetxt('linden1.dat',dens_comb.T,delimiter=' ',header='First col. --> ei.ej; 2nd and 3rd and 4th cols are the density and energy estimator and heat capacity estimator, respectively. ')

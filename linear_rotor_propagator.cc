@@ -33,17 +33,21 @@ int main(int argc, char *argv[])
 	}
 
 	string isomer, basis_type;
+	int iodevn;
 	if (spin_isomer == "spinless") {
 		isomer = "-";
 		basis_type = "";
+		iodevn = -1;
 	}
 	if (spin_isomer == "para") {
 		isomer = "-p-";
 		basis_type = "even";
+		iodevn = 0;
 	}
 	if (spin_isomer == "ortho") {
 		isomer = "-o-";
 		basis_type = "odd";
+		iodevn = 1;
 	}
 
 	double CMRECIP2KL = 1.4387672;       	//cm^-1 to Kelvin conversion factor
@@ -101,16 +105,19 @@ int main(int argc, char *argv[])
 		sum_engsq = 0.0;
 		for (int j=0; j<(jmax+1); j++)
 		{
-			Nj = (2.0*j+1.0);
-			Pn = plgndr(j,0,cost[ic]);
-			tmp = Nj*Pn*exp(-tau*bconst*j*(j+1.0));
-			sum += tmp;
-			sum_eng += tmp*j*(j+1.0);
-			sum_engsq +=tmp*j*(j+1.0)*j*(j+1.0);
+			if (((j%2) == iodevn) || (iodevn == -1)) 
+			{
+				Nj = (2.0*j+1.0);
+				Pn = plgndr(j,0,cost[ic]);
+				tmp = Nj*Pn*exp(-tau*bconst*j*(j+1.0));
+				sum += tmp;
+				sum_eng += tmp*j*(j+1.0);
+				sum_engsq +=tmp*j*(j+1.0)*j*(j+1.0);
+			}
 		}
 		dens[ic] = sum/(4.0*M_PI);
-		erot[ic] = sum_eng/(4.0*M_PI*dens[ic]*nslice);
-		erotsq[ic] = sum_engsq/(4.0*M_PI*nslice*nslice*dens[ic]);
+		erot[ic] = bconst*sum_eng/(4.0*M_PI*dens[ic]*nslice);
+		erotsq[ic] = bconst*bconst*sum_engsq/(4.0*M_PI*nslice*nslice*dens[ic]);
 		fid<<cost[ic]<<"  "<<dens[ic]<<"  "<<erot[ic]<<"  "<<erotsq[ic]<<endl;
 	}
 	fid.close();
